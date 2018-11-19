@@ -1,0 +1,235 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Note App",
+        "description": "This is a Swagger API Documentation for Note App",
+        "contact": {
+            "Name": "Jahnavi M"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/notes": {
+            "post": {
+                "description": "This api is used create new note document.",
+                "summary": "Create note",
+                "tags": [
+                    "POST"
+                ],
+                "operationId": "NotesApp-Post",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "description": "Title for the Note"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "Detailed Information of the Note"
+                    },
+                    {
+                        "name": "files",
+                        "in": "formData",
+                        "required": false,
+                        "type": "file",
+                        "description": "File to be attached to the Note"
+                    },
+                    {
+                        "name": "remainder",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "Adding Remainder informations to the Note. It Consists of reminder enabled info, reminder date and remainder seen info. Example for remainder field { \"enabled\": true, \"time\" : \"2018-11-15T14:59:00.577Z\", \"seen\": false}"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "On Successfull Creation of Note"
+                    },
+                    "400": {
+                        "description": "If the request is not in right format/Bad request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "get": {
+                "description": "This API is used for fetching all the existing notes except deleted. This is used to search for notes using Search String entered in Header. This API is also used to get all Notes with remainder and also Unseen remaiders by sending filter object in the header",
+                "summary": "Retrives notes",
+                "tags": [
+                    "GET"
+                ],
+                "operationId": "NotesApp-Get",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filters",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "This header is used to add filter condition to the Get notes. It is json and the key is remainderSeen and value should be unseen. Filter to get unseen reaminder is {\"remainderSeen\": \"unseen\"}"
+                    },
+                    {
+                        "name": "flag",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "This header acts as a flag to search the note. Value should be search inorder to enable search String"
+                    },
+                    {
+                        "name": "searchstr",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "description": "This header is used to enter the search string to be searched"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "On fecthing note successfully"
+                    },
+                    "400": {
+                        "description": "If the request is not in right format/Bad request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/notes/{noteId}": {
+            "delete": {
+                "description": "This API is used for deleting the note doc from the collection by providing the note Id.",
+                "summary": "Delete/removing the note document",
+                "tags": [
+                    "DELETE"
+                ],
+                "operationId": "NoteApp-Delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "Note",
+                        "description": "Enter the note object",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "hardDelete": {
+                                    "type": "boolean",
+                                    "description": "Enter boolean value"
+                                }
+                            },
+                            "style": "raw",
+                            "explode": true
+                        }
+                    }
+
+                ],
+                "responses": {
+                    "200": {
+                        "description": "On fecthing note successfully"
+                    },
+                    "400": {
+                        "description": "If the request is not in right format/Bad request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/notes/{ noteId }": {
+            "put": {
+                "description": "This api is used modify the given note document with the specified input fields given.",
+                "summary": "Modify note document",
+                "tags": [
+                    "PUT"
+                ],
+                "operationId": "NotesApp-Put",
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "description": "Title for the Note"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "Detailed Information of the Note"
+                    },
+                    {
+                        "name": "files",
+                        "in": "formData",
+                        "required": false,
+                        "type": "file",
+                        "description": "File to be attached to the Note"
+                    },
+                    {
+                        "name": "removeAttachment",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "File to be removed from the existing Note."
+                    },
+                    {
+                        "name": "remainder",
+                        "in": "formData",
+                        "required": false,
+                        "type": "string",
+                        "description": "Adding Remainder informations to the Note. It Consists of reminder enabled info, reminder date and remainder seen info. Example for remainder field { \"enabled\": true, \"time\" : \"2018-11-15T14:59:00.577Z\", \"seen\": false}"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "On successfull modification of note"
+                    },
+                    "400": {
+                        "description": "If the request is not in right format/Bad request"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    }
+}
