@@ -144,10 +144,10 @@ module.exports.editNotes = (noteId, fields, files, callback) => {
                 // First callback
                 function (callback) {
                     if (fields.title)
-                        user.iue_firstName = fields.title;
+                        note.title = fields.title;
 
                     if (fields.description)
-                        note.iue_lastName = fields.description;
+                        note.description = fields.description;
 
                     callback(null, note);
                 },
@@ -156,15 +156,15 @@ module.exports.editNotes = (noteId, fields, files, callback) => {
                     if (fields.remainder) {
                         var remainderParse = JSON.parse(fields.remainder);
 
-                        if (remainderParse.enabled && remainderParse.enabled == false) {
+                        if (remainderParse.enabled !== undefined && remainderParse.enabled == false) {
                             cancelJob(note._id)
                             note.remainder.enabled = false
                             note.remainder.seen = false
                         }
                         else {
-                            if (remainderParse.enabled && remainderParse.enabled == true) {
+                            if (remainderParse.enabled !== undefined && remainderParse.enabled == true) {
                                 if (remainderParse.enabled == note.remainder.enabled) {
-                                    if (remainderParse.time && note.remainder.time && note.remainder.time == remainderParse.time) {
+                                    if (remainderParse.time && note.remainder.time && note.remainder.time.getTime() == new Date(remainderParse.time).getTime()) {
                                         if (note.remainder.seen == remainderParse.seen) {
                                             console.log("No modification done")
                                         }
@@ -237,6 +237,9 @@ module.exports.editNotes = (noteId, fields, files, callback) => {
                         function (err) {
                             callback(null, note);
                         });
+                    }
+                    else {
+                        callback(null, note);
                     }
                 },
                 // Fifth callback
